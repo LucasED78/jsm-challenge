@@ -1,0 +1,6 @@
+.NavigationItem {
+  color: #707070;
+  transition: color 0.5s;
+}
+
+.NavigationItem.Active { color: #202020; }

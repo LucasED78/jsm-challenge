@@ -1,11 +1,12 @@
 import React from 'react';
 import Layout from './containers/Layout/Layout';
+import Toolbar from './components/Navigation/Toolbar/Toolbar';
 
 const App = () => {
   return (
     <>
       <Layout>
-        Testando o Layout
+        <Toolbar />
       </Layout>
     </>
   )
