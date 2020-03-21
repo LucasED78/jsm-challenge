@@ -35,6 +35,10 @@ module.exports = {
       {
         test: /\.(png|jpg|gif|ttf)$/i,
         use: 'url-loader'
+      },
+      {
+        test: /\.svg$/,
+        use: ['@svgr/webpack']
       }
     ]
   },
@@ -43,7 +47,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      '@': 'src' 
+      '@': path.resolve(__dirname, 'src')
     }
   }
 }
