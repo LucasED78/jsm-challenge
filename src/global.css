@@ -16,6 +16,11 @@
   font-weight: bold;
 }
 
+html * {
+  box-sizing: border-box;
+  outline: none;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -23,3 +28,7 @@ body {
   font-family: OpenSans;
   font-weight: 500;
 }
+
+a { text-decoration: none; }
+
+a:visited { color: #707070; }
