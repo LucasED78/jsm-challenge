@@ -1,0 +1,42 @@
+.JSMCheckbox__input { display: none; }
+
+.JSMCheckbox__wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: lighter;
+  margin: 10px 0;
+}
+
+.JSMCheckbox {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #707070;
+  cursor: pointer;
+  position: relative;
+  margin-right: 5px;
+}
+
+input[type="checkbox"]:checked + .JSMCheckbox::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  background-color: #707070;
+  animation: fadeIn .2s linear;
+}
+
+@keyframes fadeIn {
+  from {
+    width: 0;
+    height: 0;
+  }
+
+  to {
+    width: 8px;
+    height: 8px;
+  }
+}
