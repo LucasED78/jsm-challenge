@@ -1,0 +1,9 @@
+.Client__List {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #EFEFEF;
+  padding: 20px 30px;
+  justify-content: space-between;
+}
+
+.Client__List:not(:first-of-type) { margin: 10px 0; }

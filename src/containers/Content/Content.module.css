@@ -1,5 +1,5 @@
 .Content {
   display: grid;
-  grid-template-columns: 30% 70%;
+  grid-template-columns: 25% 75%;
   column-gap: 10px;
 }

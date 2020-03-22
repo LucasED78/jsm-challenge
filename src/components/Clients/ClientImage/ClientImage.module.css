@@ -1,0 +1,19 @@
+.Client__Image {
+  margin-bottom: 30px;
+  border-radius: 10px;
+}
+
+.Client__Image--large {
+  width: 128px;
+  height: 128px;
+}
+
+.Client__Image--medium {
+  width: 72px;
+  height: 72px;
+}
+
+.Client__Image--thumbnail {
+  width: 48px;
+  height: 48px;
+}
