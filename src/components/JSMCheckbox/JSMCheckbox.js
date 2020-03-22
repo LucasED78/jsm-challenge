@@ -6,6 +6,7 @@ const JSMCheckbox = props => <label className={classes.JSMCheckbox__wrapper}>
     type="checkbox" 
     name={props.name} 
     className={classes.JSMCheckbox__input} 
+    value={props.value}
     onChange={props.onChange} />
   <span className={classes.JSMCheckbox}></span>
   { props.label }
