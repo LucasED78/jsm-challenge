@@ -11,10 +11,13 @@ import ClientList from '../../components/Clients/ClientList/ClientList';
 class Content extends Component {
 
   state = {
-    clients: []
+    clients: [],
+    loading: false
   }
 
   async componentDidMount(){
+    this.setState({ loading: true })
+
     const data = await ClientService.getAll();
 
     let clients = [...this.state.clients];
@@ -22,6 +25,8 @@ class Content extends Component {
     clients = data;
 
     this.setState({ clients: clients });
+
+    this.setState({ loading: false })
   }
 
   render(){
@@ -37,7 +42,7 @@ class Content extends Component {
           </span>
 
           <ClientWrapper>
-            <ClientList clients={this.state.clients} />
+            <ClientList loading={this.state.loading} clients={this.state.clients} />
           </ClientWrapper>
         </div>
       </ContentWrapper>

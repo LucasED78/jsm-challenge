@@ -4,10 +4,13 @@ import ClientImage from '@/components/Clients/ClientImage/ClientImage';
 import ClientTitle from '@/components/Clients/ClientTitle/ClientTitle';
 import { ClientInfo, ClientInfoSmall } from '@/components/Clients/ClientInfo/ClientInfo';
 import { v4 as uuid } from 'uuid';
+import ClientShimmer from '@/components/Clients/ClientShimmer/ClientShimmer';
 import strUtil from '@/utils/stringUtil';
 
-const ClientList = props => {
-  return props.clients.map(e => {
+const ClientList = props => { 
+  return props.loading ? [...Array(9)].map(_ => <ClientShimmer key={uuid()} />)
+  
+  : props.clients.map(e => {
     const { first: firstname, last: lastname} = e.name;
     const { city, state, postcode, street } = e.location;
 
