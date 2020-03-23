@@ -53,16 +53,21 @@ class Content extends Component {
     this.setState({ filters: filters });
   }
 
-  filterClients = () => {
-    if (this.state.filters.includes('Special')) {
-      const filteredClients = this.state.clients.filter(e => filterSpecial(e.location.coordinates.latitude, e.location.coordinates.longitude));
+  filterClients = async () => {
+    try {
+      this.setState({ loading: true });
 
       let clients = [...this.state.clients];
 
-      clients = filteredClients;
+      const response = await ClientService.filter(this.state.filters);
 
-      this.setState({ clients: clients });
-      
+      clients = response;
+
+      this.setState({ clients: clients })
+
+      this.setState({ loading: false });
+    } catch(e){
+      this.setState({ loading: false });
     }
   }
 
@@ -73,8 +78,8 @@ class Content extends Component {
           <span>
             <Sidebar>
               <JSMCheckbox label="Especial" value="Special" name="filters[]" onChange={this.checkboxChangeHandler} />
-              <JSMCheckbox label="Normal" value="Normal" name="filters[]" />
-              <JSMCheckbox label="Trabalhoso" value="Trabalhoso" name="filters[]" />
+              <JSMCheckbox label="Normal" value="Normal" name="filters[]" onChange={this.checkboxChangeHandler} />
+              <JSMCheckbox label="Trabalhoso" value="Hard" name="filters[]" onChange={this.checkboxChangeHandler} />
             </Sidebar>
           </span>
 
