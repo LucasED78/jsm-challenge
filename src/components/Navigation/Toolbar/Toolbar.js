@@ -3,12 +3,12 @@ import Logo from '@/components/Navigation/Logo/Logo';
 import SearchBar from '@/components/SearchBar/SearchBar';
 import classes from './Toolbar.module.css';
 
-const Toolbar = () => <header className={classes.Toolbar}>
+const Toolbar = props => <header className={classes.Toolbar}>
   <div className={classes.Logo}>
     <Logo />
   </div>
 
-  <SearchBar />
+  <SearchBar onKeyUp={props.searchbarPressedHandler} />
 </header>
 
 export default Toolbar;

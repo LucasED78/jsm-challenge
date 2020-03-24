@@ -1,9 +1,9 @@
 import api from './api';
 
 export default {
-  getAll: async () => {
+  getAll: async page => {
     try {
-      const response = await api().get('/client');
+      const response = await api().get(`/client?page=${page}`);
 
       if (response.data) {
         return response.data;
@@ -31,7 +31,7 @@ export default {
   },
   filter: async (filters, page) => {
     try {
-      const response = await api().post('/client/filter', {
+      const response = await api().post(`/client/filter?page=${page}`, {
         filters
       });
 

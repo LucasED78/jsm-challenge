@@ -6,6 +6,8 @@ import JSMCheckbox from '@/components/JSMCheckbox/JSMCheckbox';
 import ClientWrapper from '@/components/Clients/ClientWrapper/ClientWrapper';
 import ClientService from '@/services/ClientService';
 import ClientList from '../../components/Clients/ClientList/ClientList';
+import Pager from '@/components/pagination/Pager/Pager';
+import Page from '@/components/pagination/Page/Page';
 
 class Content extends Component {
 
@@ -13,6 +15,11 @@ class Content extends Component {
     clients: [],
     loading: false,
     filters: [],
+    pagination: {
+      index: 1,
+      isLastPage: false,
+      mode: 'home'
+    }
   }
 
   async componentDidMount(){
@@ -20,6 +27,7 @@ class Content extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
+    console.log(this.state.pagination)
     if (prevState.filters !== this.state.filters && this.state.filters) {
       this.filterClients();
     }
@@ -27,20 +35,33 @@ class Content extends Component {
     if (prevState.filters.length > 0 && this.state.filters.length == 0) this.fetchClients();
 
     if (prevProps.searchTerm !== this.props.searchTerm) this.search()
+
+    if (prevState.pagination.index !== this.state.pagination.index) {
+      if (this.state.pagination.mode == 'home') this.fetchClients();
+      else (this.filterClients());
+    }
   }
 
   async fetchClients(){
-    this.setState({ loading: true })
+    try {
+      this.setState({ loading: true })
 
-    const data = await ClientService.getAll();
+      const response = await ClientService.getAll(this.state.pagination.index);
 
-    let clients = [...this.state.clients];
+      let clients = [...this.state.clients];
 
-    clients = data;
+      clients = response.data
 
-    this.setState({ clients: clients });
+      const { lastPage } = response;
 
-    this.setState({ loading: false })
+      const pagination = {...this.state.pagination};
+
+      pagination.isLastPage = lastPage || false;
+
+      this.setState({ clients: clients, loading: false, pagination: pagination });
+    } catch(e){
+      this.setState({ loading: false });
+    }
   }
   
   checkboxChangeHandler = e => {
@@ -51,7 +72,11 @@ class Content extends Component {
     if (!e.target.checked && this.state.filters.includes(value)) filters.splice(filters.indexOf(value))
     else filters.push(value);
 
-    this.setState({ filters: filters });
+    const { pagination } = this.state;
+
+    pagination.mode = 'filter';
+
+    this.setState({ filters: filters, mode: pagination });
   }
 
   search = async () => {
@@ -62,11 +87,9 @@ class Content extends Component {
 
       const response = await ClientService.search(this.props.searchTerm);
       
-      clients = response;
+      clients = response.clients;
 
-      this.setState({ clients: clients });
-
-      this.setState({ loading: false });
+      this.setState({ clients: clients, loading: false });
     } catch(e){
       this.setState({ loading: false });
     }
@@ -78,15 +101,41 @@ class Content extends Component {
 
       let clients = [...this.state.clients];
 
-      const response = await ClientService.filter(this.state.filters);
+      const response = await ClientService.filter(this.state.filters, this.state.pagination.index);
 
-      clients = response;
+      clients = response.data;
 
-      this.setState({ clients: clients })
+      const { lastPage } = response;
 
-      this.setState({ loading: false });
+      const { pagination } = this.state;
+
+      pagination.isLastPage = lastPage;
+
+      this.setState({ clients: clients, loading: false, pagination: pagination })
     } catch(e){
       this.setState({ loading: false });
+    }
+  }
+
+  pageClickedHandler = action => {
+    let page;
+
+    const pagination = {...this.state.pagination};
+
+    let { index, isLastPage } = this.state.pagination;
+
+    if (!isLastPage) {
+      if (action == 'decrement') {
+        if (index > 1) page = index -= 1;
+      }
+      else {
+        page = index += 1;
+      }    
+      if (!isLastPage && index > 1) {
+        pagination.index = page;
+  
+        this.setState({ pagination: pagination });
+      }
     }
   }
 
@@ -104,6 +153,20 @@ class Content extends Component {
 
           <ClientWrapper>
             <ClientList loading={this.state.loading} clients={this.state.clients} />
+
+            <Pager>
+              <Page 
+                onClick={_ => this.pageClickedHandler('decrement')}
+                state={this.state.pagination.index == 1 ? 'Page--disabled' : ''}>
+                Anterior
+              </Page>
+
+              <Page 
+                onClick={_ => this.pageClickedHandler('increment')}
+                state={this.state.pagination.isLastPage ? 'Page--disabled' : ''}>
+                Próximo
+              </Page>
+            </Pager>
           </ClientWrapper>
         </div>
       </ContentWrapper>
