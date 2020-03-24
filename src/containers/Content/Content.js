@@ -6,26 +6,27 @@ import JSMCheckbox from '@/components/JSMCheckbox/JSMCheckbox';
 import ClientWrapper from '@/components/Clients/ClientWrapper/ClientWrapper';
 import ClientService from '@/services/ClientService';
 import ClientList from '../../components/Clients/ClientList/ClientList';
-import { filterSpecial } from '@/utils/clientUtils';
 
 class Content extends Component {
 
   state = {
     clients: [],
     loading: false,
-    filters: []
+    filters: [],
   }
 
   async componentDidMount(){
     this.fetchClients();
   }
 
-  componentDidUpdate(_, prevState){
+  componentDidUpdate(prevProps, prevState){
     if (prevState.filters !== this.state.filters && this.state.filters) {
       this.filterClients();
     }
     
     if (prevState.filters.length > 0 && this.state.filters.length == 0) this.fetchClients();
+
+    if (prevProps.searchTerm !== this.props.searchTerm) this.search()
   }
 
   async fetchClients(){
@@ -51,6 +52,24 @@ class Content extends Component {
     else filters.push(value);
 
     this.setState({ filters: filters });
+  }
+
+  search = async () => {
+    try {
+      this.setState({ loading: true })
+
+      let clients = [...this.state.clients];
+
+      const response = await ClientService.search(this.props.searchTerm);
+      
+      clients = response;
+
+      this.setState({ clients: clients });
+
+      this.setState({ loading: false });
+    } catch(e){
+      this.setState({ loading: false });
+    }
   }
 
   filterClients = async () => {

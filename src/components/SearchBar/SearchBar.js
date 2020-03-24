@@ -8,7 +8,8 @@ const SearchBar = props => <>
       type="text" 
       className={classes.Search} 
       placeholder={props.placeholder}
-      onChange={props.onChange} />
+      onChange={props.onChange}
+      onKeyUp={props.onKeyUp} />
 
     <FontAwesomeIcon icon="search" className={classes.Search__Icon} />
   </div>
